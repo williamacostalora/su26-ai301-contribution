@@ -133,6 +133,13 @@ Set up environment with `uv`, reproduced the bug via mocking, added 12 CSV entri
 
 ---
 
+## Pull Request
+**PR Link:** https://github.com/mlco2/codecarbon/pull/1256 (Draft)
+**PR Description:** Posted — see PR for full description, motivation, and testing summary
+**Status:** Draft — not yet marked ready for review
+
+---
+
 ## Resources Used
 - [Issue #758](https://github.com/mlco2/codecarbon/issues/758)
 - [CodeCarbon CONTRIBUTING.md](https://github.com/mlco2/codecarbon/blob/master/CONTRIBUTING.md)
