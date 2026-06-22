@@ -3,7 +3,7 @@
 **Contribution Number:** 1
 **Student:** William Acosta Lora
 **Issue:** https://github.com/mlco2/codecarbon/issues/758
-**Status:** Phase II — Complete
+**Status:** Phase III — Complete
 
 ---
 
@@ -91,21 +91,21 @@ Add TDP entries for all current Apple Silicon variants to the CSV. No logic chan
 
 **Review:** Followed project CONTRIBUTING.md — used `uv`, passed `pre-commit` (autoflake, isort, black, flake8), matched existing test style in `TestTDP` class.
 
-**Evaluate:** 42/42 CPU tests pass including 3 new Apple Silicon tests. Verified fix by mocking chip detection for M2, M3 Pro, and M4 Max — all return correct TDP with no warnings.
+**Evaluate:** 43/43 CPU tests pass including 4 new Apple Silicon tests (M2, M3, M4 chip TDP lookups, plus a fallback test for unrecognized future chips). Verified fix by mocking chip detection for M2, M3 Pro, and M4 Max — all return correct TDP with no warnings.
 
 ---
 
 ## Testing Strategy
 
 ### Unit Tests
-- [x] Test that M2 series chips return correct TDP values
-- [x] Test that M3 series chips return correct TDP values  
-- [x] Test that M4 series chips return correct TDP values
-- [x] All 42 existing CPU tests still pass
+- [x] M2 series chips (M2, M2 Pro, M2 Max, M2 Ultra) return correct TDP
+- [x] M3 series chips (M3, M3 Pro, M3 Max, M3 Ultra) return correct TDP
+- [x] M4 series chips (M4, M4 Pro, M4 Max, M4 Ultra) return correct TDP
+- [x] Unrecognized future Apple chip still falls back gracefully (no crash, uses default estimate)
+- [x] All 43 tests in `test_cpu.py` pass (41 pre-existing + 4 new... 2 skipped are platform-specific, unrelated)
 
 ### Manual Testing
-Mocked `detect_cpu_model` to return each chip variant — confirmed correct TDP returned with no fallback warning.
-
+Mocked `detect_cpu_model()` for each new chip variant and confirmed correct TDP returned with no fallback warning logged.
 ---
 
 ## Implementation Notes
@@ -113,19 +113,23 @@ Mocked `detect_cpu_model` to return each chip variant — confirmed correct TDP 
 ### Week 1 Progress
 Set up environment with `uv`, reproduced the bug via mocking, added 12 CSV entries and 3 test methods, all tests passing, committed and pushed to `fix-issue-758`.
 
+### Week 2 Progress
+- Rebased `fix-issue-758` onto latest `upstream/master` (28 commits behind → caught up cleanly, no conflicts)
+- Added edge-case test confirming an unrecognized future chip (e.g. "Apple M5 Pro") still falls back gracefully to the existing default power estimate instead of erroring
+- Re-ran full `tests/test_cpu.py` suite after rebase to confirm no regressions
+- All pre-commit hooks (autoflake, isort, black, flake8) passing on every commit
+
 ### Code Changes
 - **Files modified:** `codecarbon/data/hardware/cpu_power.csv`, `tests/test_cpu.py`
-- **Key commit:** fce86829
+- **Key commits:**
+  - `fce86829` — feat: add Apple M2/M3/M4 chip TDP values to cpu_power.csv
+  - `8a3e3889` — test: verify unknown Apple Silicon chips fall back gracefully
+- **Branch:** https://github.com/williamacostalora/codecarbon/tree/fix-issue-758
 
----
-
-## Pull Request
-*(To be opened in Phase III)*
-
----
-
-## Learnings & Reflections
-*(To be filled in Phase IV)*
+### Challenges Faced
+- Initial `uv` PATH issue after install — resolved with `source ~/.zshrc`
+- Forgot to add `upstream` remote, so my fork was 28 commits behind `mlco2/codecarbon:master` by the time I came back to do Phase III. Fixed with `git remote add upstream` + `git rebase upstream/master` — clean rebase, no conflicts since my changes were isolated to two files
+- Mock patching gotcha: had to patch `codecarbon.core.cpu.detect_cpu_model` (where it's imported/used) rather than `codecarbon.core.util.detect_cpu_model` (where it's defined) for the mock to take effect
 
 ---
 
