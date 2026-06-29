@@ -3,7 +3,7 @@
 **Contribution Number:** 1
 **Student:** William Acosta Lora
 **Issue:** https://github.com/mlco2/codecarbon/issues/758
-**Status:** Phase III — Complete
+**Status:** Phase IV — Complete
 
 ---
 
@@ -134,11 +134,45 @@ Set up environment with `uv`, reproduced the bug via mocking, added 12 CSV entri
 ---
 
 ## Pull Request
-**PR Link:** https://github.com/mlco2/codecarbon/pull/1256 (Draft)
-**PR Description:** Posted — see PR for full description, motivation, and testing summary
-**Status:** Draft — not yet marked ready for review
 
+**PR Link:** https://github.com/mlco2/codecarbon/pull/1256
+
+**PR Description:**
+What does this PR do?: Adds TDP (Thermal Design Power) entries for Apple M2, M3, and M4 chip variants to `cpu_power.csv`, and adds unit tests covering correct TDP lookup for all new entries plus a fallback test for unrecognized future Apple chips.
+
+Why was this PR needed?: CodeCarbon's CPU power detection only had an entry for `Apple M1` in its TDP lookup table. Users on M2, M3, or M4 Macs received a fallback warning and an inaccurate generic power estimate (4W per CPU thread), producing inaccurate emissions data for a large and growing portion of ML practitioners on Apple Silicon.
+
+What are the relevant issue numbers?: Fixes #758
+
+Does this PR meet the acceptance criteria?:
+- [x] Tests added for new behavior
+- [x] All tests passing (43/43, 2 pre-existing skips unrelated to this change)
+- [x] Follows project style guide (passed autoflake, isort, black, flake8)
+- [x] No breaking changes
+
+**Maintainer Feedback:**
+- No direct maintainer review received yet after initial submission, but on re-reading the original issue thread I noticed my first-pass TDP values didn't match the sourced table @makoeppel had already posted there (NotebookCheck, CPU Monkey). Proactively corrected this before further review rather than waiting for a maintainer to flag it.
+- Pushed a follow-up commit (`7d97afe`) correcting all M2/M3/M4 TDP values to align with the issue's sourced data, and added a "Note on TDP value sourcing" section to the PR description, being transparent about which values are direct sources vs. extrapolated (M3 Ultra, M4 Pro/Max/Ultra had no published source, so these are extrapolated proportionally from M3-generation equivalents).
+- Closed a duplicate PR (#1255) I had accidentally opened on the same branch.
+- Left a comment on the PR summarizing the correction and inviting feedback on the extrapolated values.
+
+**Status:** Awaiting review
 ---
+## Learnings & Reflections
+
+### Technical Skills Gained
+- Practical experience with `uv` for Python dependency management
+- Writing and debugging `unittest.mock.patch` correctly — specifically understanding that you must patch where a function is *used* (`codecarbon.core.cpu.detect_cpu_model`), not where it's *defined* (`codecarbon.core.util.detect_cpu_model`)
+- Rebasing a long-lived feature branch cleanly onto a fast-moving upstream
+- Writing a transparent, well-sourced PR description that documents data provenance, not just code changes
+
+### Challenges Overcome
+- Initial `uv` PATH issue after install, resolved by sourcing `~/.zshrc`
+- Fork fell 28 commits behind upstream between Phase II and Phase III; resolved by adding the `upstream` remote and rebasing
+- Caught a data-quality issue in my own PR (TDP values didn't match the maintainer-sourced table already posted in the issue) before a reviewer had to flag it, and corrected it proactively with a transparent explanation in the PR description
+
+### What I'd Do Differently Next Time
+I'd cross-reference all existing issue comments for sourced data *before* writing my first implementation, rather than estimating values and correcting them afterward. The maintainer-sourced TDP table was sitting in the issue thread from the start — reading it more carefully up front would have saved a correction cycle.
 
 ## Resources Used
 - [Issue #758](https://github.com/mlco2/codecarbon/issues/758)
