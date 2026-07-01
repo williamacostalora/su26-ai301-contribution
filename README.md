@@ -3,7 +3,7 @@
 **Contribution Number:** 1
 **Student:** William Acosta Lora
 **Issue:** https://github.com/mlco2/codecarbon/issues/758
-**Status:** Phase IV — Complete
+**Status:** Phase IV — Complete. Changes Approved — awaiting final CI approval and merge
 
 ---
 
