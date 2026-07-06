@@ -60,6 +60,23 @@ Warning filters suppress deprecation warnings from sqlite and ray rather than fi
 
 ---
 
+### Affected Components
+- Warning filter lines added in PR #2863, specifically:
+  https://github.com/apache/iceberg-python/pull/2863/files#diff-50c86b7ed8ac2cf95bd48334961bf0530cdc77b5a56f852c5c61b89d735fd711R164-R168
+- `pyiceberg/` source files where deprecated sqlite and ray APIs are called
+- Likely `pyiceberg/catalog/sqlite.py` (sqlite catalog implementation)
+- Likely `pyiceberg/` ray integration files if they exist
+---
+### Acceptance Criteria
+- [ ] All warning filters added in PR #2863 for sqlite and ray are removed
+- [ ] PyIceberg runs cleanly under Python 3.13 with zero deprecation warnings 
+      from sqlite or ray
+- [ ] Existing test suite passes under Python 3.13 with no new skips
+- [ ] No new warning suppression filters are introduced as workarounds
+---
+- [Maintainer comment from @kevinjqliu pointing at exact lines to fix](https://github.com/apache/iceberg-python/issues/2530#issuecomment-3712112040)
+- [Stale bot comment — issue needs activity to stay open](https://github.com/apache/iceberg-python/issues/2530#issuecomment-4884299454)
+-----
 ## Resources Used
 - [Issue #2530](https://github.com/apache/iceberg-python/issues/2530)
 - [PR #2863 — where warning filters were added](https://github.com/apache/iceberg-python/pull/2863/files#diff-50c86b7ed8ac2cf95bd48334961bf0530cdc77b5a56f852c5c61b89d735fd711R164-R168)
