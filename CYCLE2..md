@@ -7,6 +7,8 @@
 **Branch:** https://github.com/williamacostalora/iceberg-python/tree/fix-issue-2530
 **Status:** Phase IV — Complete | PR Open, Awaiting Review
 
+Phase IV Complete. PR #3688 open against apache/iceberg-python, 17/17 CI checks passing, awaiting maintainer review. No new updates this week 
+
 ---
 
 ## Why I Chose This Issue
